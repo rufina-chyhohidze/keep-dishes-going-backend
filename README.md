@@ -1,2 +1,2 @@
 draft domain model in:
-![forest](images/domain.png)
+![forest](images/domain1.png)

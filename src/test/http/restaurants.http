@@ -1,0 +1,50 @@
+### First restaurant (should succeed)
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+
+{
+  "ownerId": "11111111-2222-3333-4444-555555555555",
+  "restaurantName": "Rufina’s Fine Dining",
+  "streetName": "Main Street",
+  "streetNumber": "42A",
+  "postalCode": "1000",
+  "city": "Brussels",
+  "country": "Belgium",
+  "contactEmail": "contact@rufinasfinedining.be",
+  "pictureUrl": "https://toohotel.com/wp-content/uploads/2022/09/TOO_restaurant_Panoramique_vue_Paris_Seine_Tour_Eiffel_2.jpg",
+  "typeOfCuisine": "Italian",
+  "defaultPreparationTime": 30,
+  "openingHours": {
+    "monday": "10:00-22:00",
+    "tuesday": "10:00-22:00",
+    "wednesday": "10:00-22:00"
+  }
+}
+
+###
+
+### Second restaurant for same owner (should fail!)
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+
+{
+  "ownerId": "11111111-2222-3333-4444-555555555555",
+  "restaurantName": "Rufina’s Sushi Bar",
+  "streetName": "Second Street",
+  "streetNumber": "5B",
+  "postalCode": "2000",
+  "city": "Antwerp",
+  "country": "Belgium",
+  "contactEmail": "contact@rufinassushi.be",
+  "pictureUrl": "http://example.com/sushi.jpg",
+  "typeOfCuisine": "Japanese",
+  "defaultPreparationTime": 25,
+  "openingHours": {
+    "monday": "12:00-23:00",
+    "tuesday": "12:00-23:00",
+    "wednesday": "12:00-23:00"
+  }
+}
+
+
+###

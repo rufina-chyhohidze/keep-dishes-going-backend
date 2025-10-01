@@ -1,0 +1,31 @@
+### Register Owner (Signup)
+POST http://localhost:8080/owners/signup
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "secret",
+  "name": "Alice"
+}
+
+###
+
+### Sign in with correct credentials
+POST http://localhost:8080/owners/signin
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "secret"
+}
+
+###
+
+### Sign in with wrong password (should fail)
+POST http://localhost:8080/owners/signin
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "wrongpassword"
+}
