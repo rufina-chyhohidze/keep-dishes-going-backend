@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.adapter.out;
+package be.kdg.backend.restaurant.adapter.out.dish;
 
 import be.kdg.backend.restaurant.domain.Dish;
 import be.kdg.backend.restaurant.domain.DishType;

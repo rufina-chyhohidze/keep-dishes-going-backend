@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.adapter.out;
+package be.kdg.backend.restaurant.adapter.out.restaurantWorkload;
 
 import be.kdg.backend.restaurant.domain.RestaurantWorkload;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantWorkloadPort;

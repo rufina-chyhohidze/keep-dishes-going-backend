@@ -67,6 +67,22 @@ CREATE TABLE IF NOT EXISTS kdg_order.order_lines (
 );
 
 
+CREATE TABLE IF NOT EXISTS kdg_restaurant.owners (
+                                                     id UUID PRIMARY KEY,
+                                                     email VARCHAR(255) UNIQUE NOT NULL,
+                                                     password VARCHAR(255) NOT NULL,
+                                                     name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS kdg_restaurant.restaurants (
+                                                          restaurant_id UUID PRIMARY KEY,
+                                                          owner_id UUID NOT NULL REFERENCES kdg_restaurant.owners(id),
+                                                          name VARCHAR(255) NOT NULL,
+                                                          contact_email VARCHAR(255),
+                                                          picture_url TEXT,
+                                                          type_of_cuisine VARCHAR(100),
+                                                          default_preparation_time INT NOT NULL
+);
 DROP TABLE IF EXISTS kdg_order.order_lines;
 DROP TABLE IF EXISTS kdg_order.orders;
 DROP SCHEMA IF EXISTS kdg_order CASCADE;

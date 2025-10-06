@@ -1,48 +1,45 @@
-### First restaurant (should succeed)
-POST http://localhost:8080/restaurants
+### 1. Register Owner
+POST http://localhost:8080/owners/signup
 Content-Type: application/json
 
 {
-  "ownerId": "11111111-2222-3333-4444-555555555555",
-  "restaurantName": "Rufina’s Fine Dining",
-  "streetName": "Main Street",
-  "streetNumber": "42A",
-  "postalCode": "1000",
-  "city": "Brussels",
-  "country": "Belgium",
-  "contactEmail": "contact@rufinasfinedining.be",
-  "pictureUrl": "https://toohotel.com/wp-content/uploads/2022/09/TOO_restaurant_Panoramique_vue_Paris_Seine_Tour_Eiffel_2.jpg",
-  "typeOfCuisine": "Italian",
-  "defaultPreparationTime": 30,
-  "openingHours": {
-    "monday": "10:00-22:00",
-    "tuesday": "10:00-22:00",
-    "wednesday": "10:00-22:00"
-  }
+  "email": "rufina2@example.com",
+  "password": "secret123",
+  "name": "Rufina"
 }
 
 ###
 
-### Second restaurant for same owner (should fail!)
+### 2. Sign In (to verify works)
+POST http://localhost:8080/owners/signin
+Content-Type: application/json
+
+{
+  "email": "rufina2@example.com",
+  "password": "secret123"
+}
+
+###
+
+### 3. Create Restaurant for that owner
 POST http://localhost:8080/restaurants
 Content-Type: application/json
 
 {
-  "ownerId": "11111111-2222-3333-4444-555555555555",
-  "restaurantName": "Rufina’s Sushi Bar",
-  "streetName": "Second Street",
-  "streetNumber": "5B",
-  "postalCode": "2000",
-  "city": "Antwerp",
+  "ownerId": "75cdc3c4-a95d-4698-8a94-884a7e2aac07",
+  "restaurantName": "Rufina Fine Dining",
+  "streetName": "Grand Avenue",
+  "streetNumber": "42A",
+  "postalCode": "1000",
+  "city": "Brussels",
   "country": "Belgium",
-  "contactEmail": "contact@rufinassushi.be",
-  "pictureUrl": "http://example.com/sushi.jpg",
-  "typeOfCuisine": "Japanese",
+  "contactEmail": "contact@rufinarestaurant.be",
+  "pictureUrl": "https://example.com/rufina.jpg",
+  "typeOfCuisine": "French",
   "defaultPreparationTime": 25,
   "openingHours": {
-    "monday": "12:00-23:00",
-    "tuesday": "12:00-23:00",
-    "wednesday": "12:00-23:00"
+    "monday": "10:00-22:00",
+    "tuesday": "10:00-22:00"
   }
 }
 

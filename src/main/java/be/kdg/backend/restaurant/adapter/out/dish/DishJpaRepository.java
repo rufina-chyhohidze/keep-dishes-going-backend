@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.adapter.out;
+package be.kdg.backend.restaurant.adapter.out.dish;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -15,7 +15,7 @@ public class Owner {
 
     private final List<Object> domainEvents = new ArrayList<>();
 
-    private Owner(UUID id, String email, String password, String name) {
+    public Owner(UUID id, String email, String password, String name) {
         this.id = id;
         this.email = email;
         this.password = password;

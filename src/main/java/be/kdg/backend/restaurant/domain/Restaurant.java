@@ -13,7 +13,7 @@ public class Restaurant {
     private final int defaultPreparationTime; // in minutes
     private final OpeningHours openingHours;
 
-    private Restaurant(UUID restaurantId, UUID ownerId, String name, Address address,
+    public Restaurant(UUID restaurantId, UUID ownerId, String name, Address address,
                        String contactEmail, String pictureUrl, String cuisineType,
                        int defaultPreparationTime, OpeningHours openingHours) {
         this.restaurantId = restaurantId;
