@@ -1,9 +1,11 @@
 package be.kdg.backend.restaurant.adapter.in;
 
+import be.kdg.backend.restaurant.adapter.in.dto.DishResponse;
 import be.kdg.backend.restaurant.adapter.in.dto.EditDishRequest;
 import be.kdg.backend.restaurant.domain.DishType;
 import be.kdg.backend.restaurant.domain.FoodTag;
 import be.kdg.backend.restaurant.port.in.EditDishUseCase;
+import be.kdg.backend.restaurant.port.in.LoadDishesByRestaurantUseCase;
 import be.kdg.backend.restaurant.port.in.PublishDishUseCase;
 import be.kdg.backend.restaurant.port.in.request.EditDishCommand;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,10 +26,24 @@ public class DishController {
 
     private final EditDishUseCase editDishUseCase;
     private final PublishDishUseCase publishDishUseCase;
+    private final LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase;
 
-    public DishController(EditDishUseCase editDishUseCase, PublishDishUseCase publishDishUseCase) {
+    public DishController(EditDishUseCase editDishUseCase, PublishDishUseCase publishDishUseCase, LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase) {
         this.editDishUseCase = editDishUseCase;
         this.publishDishUseCase = publishDishUseCase;
+        this.loadDishesByRestaurantUseCase = loadDishesByRestaurantUseCase;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<DishResponse>> getDishesByRestaurant(@PathVariable UUID restaurantId) {
+        log.info("Fetching dishes for restaurant {}", restaurantId);
+
+        List<DishResponse> dishes = loadDishesByRestaurantUseCase.loadByRestaurantId(restaurantId)
+                .stream()
+                .map(DishResponse::fromDomain)
+                .toList();
+
+        return ResponseEntity.ok(dishes);
     }
     @PutMapping("/{dishId}")
     public ResponseEntity<UUID> editDraftDish(@PathVariable UUID restaurantId,

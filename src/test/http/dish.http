@@ -1,4 +1,4 @@
-PUT http://localhost:8080/restaurants/396591b9-4b97-4354-a8b1-0e15372bc09d/dishes/ffffffff-1111-2222-3333-444444444447
+PUT http://localhost:8080/restaurants/396591b9-4b97-4354-a8b1-0e15372bc09d/dishes/ffffffff-1111-2222-3333-444444444445
 Content-Type: application/json
 
 {
@@ -47,4 +47,11 @@ Content-Type: application/json
 
 POST http://localhost:8080/restaurants/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/dishes/ffffffff-1111-2222-3333-444444444444/publish
 Content-Type: application/json
+###
 
+###  Publish normally (first dish, just to confirm works,draft cant be published)
+POST http://localhost:8080/restaurants/396591b9-4b97-4354-a8b1-0e15372bc09d/dishes/ffffffff-1111-2222-3333-444444444446/publish
+Content-Type: application/json\
+###  Try to publish the 11th dish (should return 409 Conflict)
+POST http://localhost:8080/restaurants/396591b9-4b97-4354-a8b1-0e15372bc09d/dishes/ffffffff-1111-2222-3333-444444449999/publish
+Content-Type: application/json

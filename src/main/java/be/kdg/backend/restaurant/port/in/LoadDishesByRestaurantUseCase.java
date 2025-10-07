@@ -1,12 +1,10 @@
-package be.kdg.backend.restaurant.port.out;
+package be.kdg.backend.restaurant.port.in;
 
 import be.kdg.backend.restaurant.domain.Dish;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface LoadDishPort {
-    Optional<Dish> loadById(UUID dishId);
+public interface LoadDishesByRestaurantUseCase {
     List<Dish> loadByRestaurantId(UUID restaurantId);
 }

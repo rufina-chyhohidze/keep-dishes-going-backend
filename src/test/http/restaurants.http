@@ -3,9 +3,9 @@ POST http://localhost:8080/owners/signup
 Content-Type: application/json
 
 {
-  "email": "rufina2@example.com",
+  "email": "michael@example.com",
   "password": "secret123",
-  "name": "Rufina"
+  "name": "Michael"
 }
 
 ###
@@ -15,7 +15,7 @@ POST http://localhost:8080/owners/signin
 Content-Type: application/json
 
 {
-  "email": "rufina2@example.com",
+  "email": "michael@example.com",
   "password": "secret123"
 }
 
@@ -26,20 +26,21 @@ POST http://localhost:8080/restaurants
 Content-Type: application/json
 
 {
-  "ownerId": "75cdc3c4-a95d-4698-8a94-884a7e2aac07",
-  "restaurantName": "Rufina Fine Dining",
-  "streetName": "Grand Avenue",
-  "streetNumber": "42A",
+  "ownerId": "82989f66-6c5a-4b4e-a1b1-95fc26bc25ab",
+  "restaurantName": "Jorge Burgers",
+  "streetName": "Grand Place",
+  "streetNumber": "423A",
   "postalCode": "1000",
-  "city": "Brussels",
+  "city": "Antwerpen",
   "country": "Belgium",
-  "contactEmail": "contact@rufinarestaurant.be",
-  "pictureUrl": "https://example.com/rufina.jpg",
-  "typeOfCuisine": "French",
-  "defaultPreparationTime": 25,
+  "contactEmail": "georgeburger@restaurant.be",
+  "pictureUrl": "https://skip-strapi-prod.s3.us-west-2.amazonaws.com/burgers_1_9e9eaa22f6.jpg?w=3840&q=100",
+  "typeOfCuisine": "American",
+  "defaultPreparationTime": 15,
   "openingHours": {
-    "monday": "10:00-22:00",
-    "tuesday": "10:00-22:00"
+    "monday": "12:00-23:00",
+    "tuesday": "12:00-23:00",
+    "saturday": "16:00-23:00"
   }
 }
 
