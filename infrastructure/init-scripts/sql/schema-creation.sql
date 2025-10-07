@@ -83,6 +83,69 @@ CREATE TABLE IF NOT EXISTS kdg_restaurant.restaurants (
                                                           type_of_cuisine VARCHAR(100),
                                                           default_preparation_time INT NOT NULL
 );
+
+ALTER TABLE kdg_restaurant.dishes
+    DROP COLUMN food_tags;
+
+ALTER TABLE kdg_restaurant.dishes
+    ADD COLUMN food_tags VARCHAR(255) DEFAULT '';
+
+INSERT INTO kdg_restaurant.dishes (
+    dish_id, restaurant_id, name, type, description, price, picture_url,
+    availability, stock_status, food_tags
+) VALUES (
+             'ffffffff-1111-2222-3333-444444444445',
+             '396591b9-4b97-4354-a8b1-0e15372bc09d',
+             'Truffle risotto draft dish',
+             'MAIN',
+             'Creamy risotto with black truffle essence.',
+             24.50,
+             'https://example.com/risotto.jpg',
+             'DRAFT',
+             'IN_STOCK',
+             '{GLUTEN_FREE}'
+         );
+
+INSERT INTO kdg_restaurant.dishes (
+    dish_id, restaurant_id, name, type, description, price, picture_url,
+    availability, stock_status, food_tags
+) VALUES
+      ('ffffffff-1111-2222-3333-444444444446',
+       '396591b9-4b97-4354-a8b1-0e15372bc09d',
+       'Seared Salmon Fillet',
+       'MAIN',
+       'Pan-seared salmon with lemon butter sauce.',
+       18.90,
+       'https://example.com/salmon.jpg',
+       'DRAFT',
+       'IN_STOCK',
+       'LACTOSE'),
+
+      ('ffffffff-1111-2222-3333-444444444447',
+       '396591b9-4b97-4354-a8b1-0e15372bc09d',
+       'Avocado Tartare',
+       'STARTER',
+       'Fresh avocado with tomato and herbs.',
+       9.50,
+       'https://example.com/avocado.jpg',
+       'DRAFT',
+       'IN_STOCK',
+       'VEGAN'),
+
+      ('ffffffff-1111-2222-3333-444444444448',
+       '396591b9-4b97-4354-a8b1-0e15372bc09d',
+       'Chocolate Lava Cake',
+       'DESSERT',
+       'Warm chocolate cake with molten center.',
+       7.80,
+       'https://example.com/choco.jpg',
+       'PUBLISHED',
+       'IN_STOCK',
+       'NUTS');
+
+
 DROP TABLE IF EXISTS kdg_order.order_lines;
 DROP TABLE IF EXISTS kdg_order.orders;
 DROP SCHEMA IF EXISTS kdg_order CASCADE;
+DROP TABLE IF EXISTS kdg_restaurant.dishes;
+

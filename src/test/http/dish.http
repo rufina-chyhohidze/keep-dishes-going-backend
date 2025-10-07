@@ -1,16 +1,18 @@
-### Edit a draft dish (happy path)
-PUT http://localhost:8080/restaurants/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/dishes/ffffffff-1111-2222-3333-444444444444
+PUT http://localhost:8080/restaurants/396591b9-4b97-4354-a8b1-0e15372bc09d/dishes/ffffffff-1111-2222-3333-444444444447
 Content-Type: application/json
 
 {
-  "name": "Truffle Risotto",
+  "name": "Rufi",
   "type": "main",
   "foodTags": ["vegetarian", "glutenFree"],
-  "description": "Creamy risotto with black peper",
-  "price": 25,
+  "description": "Creamy risotto with black truffles and parmesan",
+  "price": 25.00,
   "pictureUrl": "https://example.com/risotto.jpg"
 }
 
+###
+POST http://localhost:8080/restaurants/396591b9-4b97-4354-a8b1-0e15372bc09d/dishes/ffffffff-1111-2222-3333-444444444445/publish
+Content-Type: application/json
 
 ###
 
@@ -41,3 +43,8 @@ Content-Type: application/json
   "price": 19.99,
   "pictureUrl": "https://example.com/live.jpg"
 }
+###
+
+POST http://localhost:8080/restaurants/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/dishes/ffffffff-1111-2222-3333-444444444444/publish
+Content-Type: application/json
+

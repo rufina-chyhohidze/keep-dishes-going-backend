@@ -47,7 +47,7 @@ public class DishJpaAdapter  implements LoadDishPort, SaveDishPort {
                     .collect(Collectors.toSet());
         }
 
-        return Dish.rehydrate(
+        return new Dish(
                 e.getDishId(),
                 e.getRestaurantId(),
                 e.getName(),

@@ -4,6 +4,8 @@ import be.kdg.backend.common.events.restaurant.DishEditedAsDraftEvent;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Dish {
     private final UUID dishId;
@@ -21,7 +23,7 @@ public class Dish {
 
     private final List<Object> domainEvents = new ArrayList<>();
 
-    private Dish(UUID dishId,
+    public Dish(UUID dishId,
                  UUID restaurantId,
                  String name,
                  DishType type,
@@ -63,14 +65,7 @@ public class Dish {
                 StockStatus.IN_STOCK
         );
     }
-    public static Dish rehydrate(UUID dishId, UUID restaurantId, String name, DishType type,
-                                 Set<FoodTag> foodTags, String description, BigDecimal price,
-                                 String pictureUrl, DishAvailability dishAvailability, StockStatus stockStatus) {
-        return new Dish(dishId, restaurantId, name, type, foodTags, description, price, pictureUrl, dishAvailability, stockStatus);
-    }
 
-
-    /** Edits are only allowed while in DRAFT to avoid impacting the live menu. */
     public void editDraft(String name,
                           DishType type,
                           Set<FoodTag> foodTags,
@@ -87,8 +82,43 @@ public class Dish {
         this.price = price;
         this.pictureUrl = pictureUrl;
 
-        // domain event to record the fact
+
         this.domainEvents.add(new DishEditedAsDraftEvent(this.dishId, this.restaurantId));
+    }
+
+    public void publish() {
+        if (this.availability != DishAvailability.DRAFT) {
+            throw new IllegalStateException("Only draft dishes can be published.");
+        }
+        this.availability = DishAvailability.PUBLISHED;
+    }
+
+
+    public void unpublish() {
+        if (this.availability != DishAvailability.PUBLISHED) {
+            throw new IllegalStateException("Only published dishes can be unpublished.");
+        }
+        this.availability = DishAvailability.UNPUBLISHED;
+    }
+
+
+    public void markOutOfStock() {
+        this.stockStatus = StockStatus.OUT_OF_STOCK;
+    }
+
+    public void markInStock() {
+        this.stockStatus = StockStatus.IN_STOCK;
+    }
+
+    public static Set<FoodTag> parseFoodTags(String tagsString) {
+        if (tagsString == null || tagsString.isBlank()) return Collections.emptySet();
+
+        return Stream.of(tagsString.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(String::toUpperCase)
+                .map(FoodTag::valueOf)
+                .collect(Collectors.toSet());
     }
 
 

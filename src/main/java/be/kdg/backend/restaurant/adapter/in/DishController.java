@@ -4,6 +4,7 @@ import be.kdg.backend.restaurant.adapter.in.dto.EditDishRequest;
 import be.kdg.backend.restaurant.domain.DishType;
 import be.kdg.backend.restaurant.domain.FoodTag;
 import be.kdg.backend.restaurant.port.in.EditDishUseCase;
+import be.kdg.backend.restaurant.port.in.PublishDishUseCase;
 import be.kdg.backend.restaurant.port.in.request.EditDishCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,11 @@ public class DishController {
     private static final Logger log = LoggerFactory.getLogger(DishController.class);
 
     private final EditDishUseCase editDishUseCase;
+    private final PublishDishUseCase publishDishUseCase;
 
-    public DishController(EditDishUseCase editDishUseCase) {
+    public DishController(EditDishUseCase editDishUseCase, PublishDishUseCase publishDishUseCase) {
         this.editDishUseCase = editDishUseCase;
+        this.publishDishUseCase = publishDishUseCase;
     }
     @PutMapping("/{dishId}")
     public ResponseEntity<UUID> editDraftDish(@PathVariable UUID restaurantId,
@@ -31,7 +34,7 @@ public class DishController {
                                               @RequestBody EditDishRequest request) {
         log.info("EditDraftDish request: restaurant={}, dish={}, payload={}", restaurantId, dishId, request);
 
-        // robust enum parsing
+
         DishType type = parseDishType(request.type());
         Set<FoodTag> tags = parseFoodTags(request.foodTags());
 
@@ -72,6 +75,18 @@ public class DishController {
         return tags;
     }
 
+    @PostMapping("/{dishId}/publish")
+    public ResponseEntity<?> publishDish(@PathVariable UUID restaurantId, @PathVariable UUID dishId) {
+        log.info("Publishing dish {} for restaurant {}", dishId, restaurantId);
+        try {
+            publishDishUseCase.publishDish(restaurantId, dishId);
+            return ResponseEntity.ok("Dish published successfully.");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("Cannot publish dish: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     private String toEnumConstant(String input) {
         if (input == null) return null;
@@ -84,6 +99,7 @@ public class DishController {
     }
 
 
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleBadInput(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -91,7 +107,6 @@ public class DishController {
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<String> handleIllegalState(IllegalStateException ex) {
-        // e.g., trying to edit a non-DRAFT dish
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
