@@ -1,29 +1,22 @@
 package be.kdg.backend.restaurant.adapter.out.mapper;
 
 import be.kdg.backend.restaurant.adapter.out.dish.DishJpaEntity;
-import be.kdg.backend.restaurant.domain.Dish;
-import be.kdg.backend.restaurant.domain.DishType;
-import be.kdg.backend.restaurant.domain.FoodTag;
+import be.kdg.backend.restaurant.adapter.out.dish.enums.DishJpaAvailability;
+import be.kdg.backend.restaurant.adapter.out.dish.enums.FoodJpaTag;
+import be.kdg.backend.restaurant.adapter.out.dish.enums.StockJpaStatus;
+import be.kdg.backend.restaurant.domain.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class DishMapper {
+
     public Dish toDomain(DishJpaEntity e) {
         Set<FoodTag> tags = Set.of();
 
-        if (e.getFoodTags() != null && !e.getFoodTags().isBlank()) {
-            tags = Stream.of(e.getFoodTags()
-                            .replace("{", "")
-                            .replace("}", "")
-                            .split(","))
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .map(s -> FoodTag.valueOf(s.toUpperCase()))
-                    .collect(Collectors.toSet());
+        if (e.getFoodTags() != null) {
+            tags = Set.of(FoodTag.valueOf(e.getFoodTags().name()));
         }
 
         return new Dish(
@@ -35,15 +28,17 @@ public class DishMapper {
                 e.getDescription(),
                 e.getPrice(),
                 e.getPictureUrl(),
-                e.getAvailability(),
-                e.getStockStatus()
+                DishAvailability.valueOf(e.getAvailability().toString()),
+                StockStatus.valueOf(e.getStockStatus().toString())
         );
     }
 
     public DishJpaEntity toEntity(Dish dish) {
-        String tags = dish.getFoodTags().stream()
-                .map(Enum::name)
-                .collect(Collectors.joining(","));
+        FoodJpaTag tag = null;
+        if (!dish.getFoodTags().isEmpty()) {
+            // Currently taking the first tag — you can extend this if you later support multiple tags
+            tag = FoodJpaTag.valueOf(dish.getFoodTags().iterator().next().name());
+        }
 
         return new DishJpaEntity(
                 dish.getDishId(),
@@ -53,9 +48,10 @@ public class DishMapper {
                 dish.getDescription(),
                 dish.getPrice(),
                 dish.getPictureUrl(),
-                dish.getAvailability(),
-                dish.getStockStatus(),
-                tags
+                DishJpaAvailability.valueOf(dish.getAvailability().toString()),
+                StockJpaStatus.valueOf(dish.getStockStatus().toString()),
+                tag
         );
     }
 }
+

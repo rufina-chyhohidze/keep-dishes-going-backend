@@ -35,8 +35,10 @@ public class DishController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DishResponse>> getDishesByRestaurant(@PathVariable UUID restaurantId) {
-        log.info("Fetching dishes for restaurant {}", restaurantId);
+    public ResponseEntity<List<DishResponse>> getDishesByRestaurant(@PathVariable("restaurantId") String rawRestaurantId) {
+        log.info("Received restaurantId RAW: '{}'", rawRestaurantId);
+        UUID restaurantId = UUID.fromString(rawRestaurantId);
+        log.info("Parsed restaurantId OK: {}", restaurantId);
 
         List<DishResponse> dishes = loadDishesByRestaurantUseCase.loadByRestaurantId(restaurantId)
                 .stream()
@@ -45,6 +47,7 @@ public class DishController {
 
         return ResponseEntity.ok(dishes);
     }
+
     @PutMapping("/{dishId}")
     public ResponseEntity<UUID> editDraftDish(@PathVariable UUID restaurantId,
                                               @PathVariable UUID dishId,

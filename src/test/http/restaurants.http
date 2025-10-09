@@ -3,9 +3,9 @@ POST http://localhost:8080/owners/signup
 Content-Type: application/json
 
 {
-  "email": "michael@example.com",
+  "email": "anir@example.com",
   "password": "secret123",
-  "name": "Michael"
+  "name": "anir"
 }
 
 ###
@@ -15,7 +15,7 @@ POST http://localhost:8080/owners/signin
 Content-Type: application/json
 
 {
-  "email": "michael@example.com",
+  "email": "anir@example.com",
   "password": "secret123"
 }
 
@@ -26,8 +26,8 @@ POST http://localhost:8080/restaurants
 Content-Type: application/json
 
 {
-  "ownerId": "82989f66-6c5a-4b4e-a1b1-95fc26bc25ab",
-  "restaurantName": "Jorge Burgers",
+  "ownerId": "d853346e-a7ff-4c94-aad1-250c60003ca2",
+  "restaurantName": "Ice cream",
   "streetName": "Grand Place",
   "streetNumber": "423A",
   "postalCode": "1000",

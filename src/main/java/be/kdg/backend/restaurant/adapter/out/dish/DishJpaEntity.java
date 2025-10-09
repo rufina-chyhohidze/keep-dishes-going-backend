@@ -1,7 +1,9 @@
 package be.kdg.backend.restaurant.adapter.out.dish;
 
-import be.kdg.backend.restaurant.domain.DishAvailability;
-import be.kdg.backend.restaurant.domain.StockStatus;
+
+import be.kdg.backend.restaurant.adapter.out.dish.enums.DishJpaAvailability;
+import be.kdg.backend.restaurant.adapter.out.dish.enums.FoodJpaTag;
+import be.kdg.backend.restaurant.adapter.out.dish.enums.StockJpaStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -21,12 +23,13 @@ public class DishJpaEntity {
     private String pictureUrl;
 
     @Enumerated(EnumType.STRING)
-    private DishAvailability availability;
-
-    private String foodTags; // comma-separated tags (e.g. "VEGAN,GLUTEN_FREE")
+    private DishJpaAvailability availability;
 
     @Enumerated(EnumType.STRING)
-    private StockStatus stockStatus;
+    private FoodJpaTag foodTags; // comma-separated tags (e.g. "VEGAN,GLUTEN_FREE")
+
+    @Enumerated(EnumType.STRING)
+    private StockJpaStatus stockStatus;
 
     public DishJpaEntity() {}
 
@@ -37,9 +40,9 @@ public class DishJpaEntity {
                          String description,
                          BigDecimal price,
                          String pictureUrl,
-                         DishAvailability availability,
-                         StockStatus stockStatus,
-                         String foodTags) {
+                         DishJpaAvailability availability,
+                         StockJpaStatus stockStatus,
+                         FoodJpaTag foodTags) {
         this.dishId = dishId;
         this.restaurantId = restaurantId;
         this.name = name;
@@ -60,7 +63,7 @@ public class DishJpaEntity {
     public String getDescription() { return description; }
     public BigDecimal getPrice() { return price; }
     public String getPictureUrl() { return pictureUrl; }
-    public DishAvailability getAvailability() { return availability; }
-    public StockStatus getStockStatus() { return stockStatus; }
-    public String getFoodTags() { return foodTags; }
+    public DishJpaAvailability getAvailability() { return availability; }
+    public StockJpaStatus getStockStatus() { return stockStatus; }
+    public FoodJpaTag getFoodTags() { return foodTags; }
 }
