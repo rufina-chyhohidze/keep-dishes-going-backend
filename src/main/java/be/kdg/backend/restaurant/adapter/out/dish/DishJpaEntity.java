@@ -4,6 +4,7 @@ package be.kdg.backend.restaurant.adapter.out.dish;
 import be.kdg.backend.restaurant.adapter.out.dish.enums.DishJpaAvailability;
 import be.kdg.backend.restaurant.adapter.out.dish.enums.FoodJpaTag;
 import be.kdg.backend.restaurant.adapter.out.dish.enums.StockJpaStatus;
+import be.kdg.backend.restaurant.domain.DishAvailability;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -53,6 +54,13 @@ public class DishJpaEntity {
         this.availability = availability;
         this.stockStatus = stockStatus;
         this.foodTags = foodTags;
+    }
+    public boolean isPublished() {
+        return this.availability == DishJpaAvailability.PUBLISHED;
+    }
+
+    public boolean isInStock() {
+        return this.stockStatus ==StockJpaStatus.IN_STOCK;
     }
 
 

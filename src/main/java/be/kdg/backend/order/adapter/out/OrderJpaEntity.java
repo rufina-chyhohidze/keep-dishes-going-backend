@@ -62,7 +62,11 @@ public class OrderJpaEntity {
                 .map(OrderLineEmbeddable::new)
                 .toList();
     }
+    public UUID getOrderId() {
+        return orderId;
+    }
 }
+
 
 @Embeddable
 class OrderLineEmbeddable {
