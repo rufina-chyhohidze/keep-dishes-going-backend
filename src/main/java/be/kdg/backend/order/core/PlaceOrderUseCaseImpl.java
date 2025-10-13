@@ -27,6 +27,10 @@ public class PlaceOrderUseCaseImpl implements PlaceOrderUseCase {
 
     @Override
     public UUID placeOrder(PlaceOrderCommand command) {
+
+        if (command.orderLines().isEmpty()) {
+            throw new IllegalArgumentException("Order must contain at least one order line");
+        }
         UUID orderId = UUID.randomUUID();
 
         Order order = new Order(orderId,

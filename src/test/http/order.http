@@ -1,4 +1,4 @@
-POST http://localhost:8080/orders/place
+POST http://localhost:8080/api/orders
 Content-Type: application/json
 
 {
@@ -14,6 +14,27 @@ Content-Type: application/json
     { "dishId": "ffffffff-1111-2222-3333-444444444444", "quantity": 2, "priceAtCheckout": 12.50 },
     { "dishId": "ffffffff-aaaa-bbbb-cccc-dddddddddddd", "quantity": 1, "priceAtCheckout": 24.50 }
   ],
+  "payment": {
+    "paymentId": "99999999-1111-2222-3333-444444444444",
+    "provider": "PAYPAL",
+    "status": "PENDING"
+  }
+}
+
+###
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "restaurantId": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "street": "Main Street",
+  "number": "42A",
+  "postalCode": "1000",
+  "city": "Brussels",
+  "country": "Belgium",
+  "orderLines": [],
   "payment": {
     "paymentId": "99999999-1111-2222-3333-444444444444",
     "provider": "PAYPAL",

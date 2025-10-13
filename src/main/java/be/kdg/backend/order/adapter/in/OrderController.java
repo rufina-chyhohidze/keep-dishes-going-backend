@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
@@ -27,8 +27,9 @@ public class OrderController {
         this.placeOrderUseCase = placeOrderUseCase;
     }
 
-    @PostMapping("/place")
+    @PostMapping
     public ResponseEntity<UUID> placeOrder(@RequestBody PlaceOrderRequest request) {
+
         CustomerInfo customerInfo = new CustomerInfo(
                 request.name(),
                 request.email(),
@@ -40,11 +41,19 @@ public class OrderController {
         );
 
         List<OrderLine> orderLines = request.orderLines().stream()
-                .map(l -> new OrderLine(l.dishId(), l.quantity(), l.priceAtCheckout()))
+                .map(l -> new OrderLine(
+                        l.dishId(),
+                        l.quantity(),
+                        l.priceAtCheckout()
+                ))
                 .toList();
 
         PaymentRequest pr = request.payment();
-        Payment payment = new Payment(pr.paymentId(), pr.provider(), PaymentStatus.valueOf(pr.status()));
+        Payment payment = new Payment(
+                pr.paymentId(),
+                pr.provider(),
+                PaymentStatus.valueOf(pr.status())
+        );
 
         PlaceOrderCommand command = new PlaceOrderCommand(
                 request.restaurantId(),
@@ -54,6 +63,8 @@ public class OrderController {
         );
 
         UUID orderId = placeOrderUseCase.placeOrder(command);
+        log.info("Order placed with ID {}", orderId);
+
         return ResponseEntity.ok(orderId);
     }
 }
