@@ -1,8 +1,8 @@
-package be.kdg.backend.restaurant.adapter.in;
+package be.kdg.backend.restaurant.adapter.in.listeners;
 
 import be.kdg.backend.common.events.OrderPlacedEvent;
-import be.kdg.backend.restaurant.port.in.RestaurantWorkloadProjector;
-import be.kdg.backend.restaurant.port.in.request.IncreaseWorkloadCommand;
+import be.kdg.backend.restaurant.port.in.restaurant_workload_projection.RestaurantWorkloadProjector;
+import be.kdg.backend.restaurant.port.in.restaurant_workload_projection.IncreaseWorkloadCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

@@ -1,8 +1,8 @@
 package be.kdg.backend.restaurant.core;
 
 import be.kdg.backend.restaurant.domain.RestaurantWorkload;
-import be.kdg.backend.restaurant.port.in.RestaurantWorkloadProjector;
-import be.kdg.backend.restaurant.port.in.request.IncreaseWorkloadCommand;
+import be.kdg.backend.restaurant.port.in.restaurant_workload_projection.RestaurantWorkloadProjector;
+import be.kdg.backend.restaurant.port.in.restaurant_workload_projection.IncreaseWorkloadCommand;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantWorkloadPort;
 import be.kdg.backend.restaurant.port.out.UpdateRestaurantWorkloadPort;
 import jakarta.transaction.Transactional;

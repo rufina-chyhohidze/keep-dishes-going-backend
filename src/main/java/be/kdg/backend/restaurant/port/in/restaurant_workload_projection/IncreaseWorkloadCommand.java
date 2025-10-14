@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.port.in.request;
+package be.kdg.backend.restaurant.port.in.restaurant_workload_projection;
 
 import java.util.UUID;
 
