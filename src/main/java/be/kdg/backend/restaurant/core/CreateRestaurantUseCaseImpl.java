@@ -23,11 +23,12 @@ public class CreateRestaurantUseCaseImpl implements CreateRestaurantUseCase {
         this.loadRestaurantPort = loadRestaurantPort;
         this.saveRestaurantPort = saveRestaurantPort;
     }
-
     @Override
     public UUID createRestaurant(CreateRestaurantCommand command) {
-        loadRestaurantPort.loadByOwnerId(command.ownerId()).ifPresent(r -> {
-            logger.warn("Owner {} already has a restaurant", command.ownerId());
+        // ensure owner has no existing restaurant
+        loadRestaurantPort.loadByOwnerId(command.ownerId()).ifPresent(existing -> {
+            logger.warn("Owner {} already has a restaurant with ID {}",
+                    command.ownerId(), existing.getRestaurantId());
             throw new IllegalArgumentException("Owner already has a restaurant");
         });
 
@@ -44,7 +45,12 @@ public class CreateRestaurantUseCaseImpl implements CreateRestaurantUseCase {
 
         saveRestaurantPort.save(restaurant);
 
-        logger .info("Created restaurant {} for owner {}", restaurant.getName(), restaurant.getOwnerId());
+        logger.info("Created restaurant '{}' (ID: {}) for owner {}",
+                restaurant.getName(),
+                restaurant.getRestaurantId(),
+                restaurant.getOwnerId()
+        );
+
         return restaurant.getRestaurantId();
     }
 }

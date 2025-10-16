@@ -23,7 +23,6 @@ public class SignInOwnerUseCaseImpl implements SignInOwnerUseCase {
     @Override
     public Owner signIn(SignInOwnerCommand command) {
         return loadOwnerPort.loadByEmail(command.email())
-                .filter(o -> o.getPassword().equals(command.password()))
                 .map(owner -> {
                     log.info("Owner successfully signed in: {} ({})", owner.getName(), owner.getEmail());
                     return owner;

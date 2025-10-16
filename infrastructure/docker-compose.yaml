@@ -41,6 +41,7 @@ services:
       - "8095:8095"
     networks:
       - kdg-backend
+    platform: linux/amd64
 
   idp_mysql:
     image: mysql:9.0.1
@@ -55,6 +56,7 @@ services:
       - '3307:3306'
     networks:
       - kdg-kc
+
 
   idp_keycloak:
     image: quay.io/keycloak/keycloak:26.3
@@ -73,6 +75,8 @@ services:
       - idp_mysql
     networks:
       - kdg-kc
+    volumes:
+      - ./realm-export:/opt/keycloak/data/import
 
 networks:
   kdg-kc:

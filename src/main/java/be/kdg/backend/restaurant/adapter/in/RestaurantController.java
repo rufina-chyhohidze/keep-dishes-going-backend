@@ -11,6 +11,8 @@ import be.kdg.backend.restaurant.port.out.LoadRestaurantWorkloadPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,14 +41,28 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurants);
     }
     @PostMapping
-    public ResponseEntity<UUID> createRestaurant(@RequestBody CreateRestaurantRequest request) {
-        Address address = new Address(request.streetName(), request.streetNumber(),
-                request.postalCode(), request.city(), request.country());
+    public ResponseEntity<UUID> createRestaurant(
+            @RequestBody CreateRestaurantRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        if (jwt == null) {
+            return ResponseEntity.status(401).build();
+        }
+        // Extract owner ID from token claims
+        String ownerId = jwt.getSubject();
+
+        Address address = new Address(
+                request.streetName(),
+                request.streetNumber(),
+                request.postalCode(),
+                request.city(),
+                request.country()
+        );
 
         OpeningHours openingHours = new OpeningHours(request.openingHours());
 
         CreateRestaurantCommand command = new CreateRestaurantCommand(
-                request.ownerId(),
+                UUID.fromString(ownerId),
                 request.restaurantName(),
                 address,
                 request.contactEmail(),
@@ -55,8 +71,8 @@ public class RestaurantController {
                 request.defaultPreparationTime(),
                 openingHours
         );
-        logger.info("Received CreateRestaurantRequest: {}", request);
 
+        logger.info("Received CreateRestaurantRequest: {} by owner {}", request, ownerId);
         UUID restaurantId = createRestaurantUseCase.createRestaurant(command);
         return ResponseEntity.ok(restaurantId);
     }

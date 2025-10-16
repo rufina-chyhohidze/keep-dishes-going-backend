@@ -18,12 +18,12 @@ public class OwnerJpaAdapter implements LoadOwnerPort, SaveOwnerPort {
     @Override
     public Optional<Owner> loadByEmail(String email) {
         return repo.findByEmail(email)
-                .map(e -> new Owner(e.getId(), e.getEmail(), e.getPassword(), e.getName()));
+                .map(e -> new Owner(e.getId(), e.getEmail(), e.getName()));
     }
 
     @Override
     public void save(Owner owner) {
-        OwnerJpaEntity entity = new OwnerJpaEntity(owner.getId(), owner.getEmail(), owner.getPassword(), owner.getName());
+        OwnerJpaEntity entity = new OwnerJpaEntity(owner.getId(), owner.getEmail(), owner.getName());
         repo.save(entity);
     }
 }

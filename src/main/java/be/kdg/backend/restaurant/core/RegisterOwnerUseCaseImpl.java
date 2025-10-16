@@ -32,8 +32,8 @@ public class RegisterOwnerUseCaseImpl implements RegisterOwnerUseCase {
             throw new IllegalArgumentException("Email already in use");
         });
 
-
-        Owner owner = Owner.register(command.email(), command.password(), command.name());
+        // external Keycloak ID from the command (this comes from JWT sub)
+        Owner owner = new Owner(command.id(), command.email(), command.name());
         saveOwnerPort.save(owner);
 
         log.info("Successfully registered owner: {} ({})", owner.getName(), owner.getEmail());

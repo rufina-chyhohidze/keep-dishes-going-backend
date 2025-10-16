@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public record CreateRestaurantRequest(
-        UUID ownerId,
         String restaurantName,
         String streetName,
         String streetNumber,
