@@ -1,9 +1,11 @@
 package be.kdg.backend.restaurant.core;
 
+import be.kdg.backend.restaurant.domain.Menu;
 import be.kdg.backend.restaurant.domain.Restaurant;
 import be.kdg.backend.restaurant.port.in.CreateRestaurantUseCase;
 import be.kdg.backend.restaurant.port.in.request.CreateRestaurantCommand;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantPort;
+import be.kdg.backend.restaurant.port.out.SaveMenuPort;
 import be.kdg.backend.restaurant.port.out.SaveRestaurantPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +20,14 @@ public class CreateRestaurantUseCaseImpl implements CreateRestaurantUseCase {
 
     private final LoadRestaurantPort loadRestaurantPort;
     private final SaveRestaurantPort saveRestaurantPort;
-
-    public CreateRestaurantUseCaseImpl(LoadRestaurantPort loadRestaurantPort, SaveRestaurantPort saveRestaurantPort) {
+    private final SaveMenuPort saveMenuPort;
+    public CreateRestaurantUseCaseImpl(LoadRestaurantPort loadRestaurantPort, SaveRestaurantPort saveRestaurantPort, SaveMenuPort saveMenuPort) {
         this.loadRestaurantPort = loadRestaurantPort;
         this.saveRestaurantPort = saveRestaurantPort;
+        this.saveMenuPort = saveMenuPort;
     }
     @Override
     public UUID createRestaurant(CreateRestaurantCommand command) {
-        // ensure owner has no existing restaurant
         loadRestaurantPort.loadByOwnerId(command.ownerId()).ifPresent(existing -> {
             logger.warn("Owner {} already has a restaurant with ID {}",
                     command.ownerId(), existing.getRestaurantId());
@@ -45,6 +47,10 @@ public class CreateRestaurantUseCaseImpl implements CreateRestaurantUseCase {
 
         saveRestaurantPort.save(restaurant);
 
+        //create and save the menu automatically
+        Menu menu = Menu.create(restaurant.getRestaurantId());
+        saveMenuPort.save(menu);
+        logger.info("Menu created for restaurant {}", restaurant.getRestaurantId());
         logger.info("Created restaurant '{}' (ID: {}) for owner {}",
                 restaurant.getName(),
                 restaurant.getRestaurantId(),

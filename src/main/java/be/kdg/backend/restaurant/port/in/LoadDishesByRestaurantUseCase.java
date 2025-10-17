@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface LoadDishesByRestaurantUseCase {
     List<Dish> loadByRestaurantId(UUID restaurantId);
+    List<Dish> loadAllByRestaurantId(UUID restaurantId); //for owner dashboard to see dishes in all states
 }

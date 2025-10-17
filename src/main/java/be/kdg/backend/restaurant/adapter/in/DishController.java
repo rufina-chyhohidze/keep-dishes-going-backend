@@ -1,23 +1,24 @@
 package be.kdg.backend.restaurant.adapter.in;
 
+import be.kdg.backend.restaurant.adapter.in.dto.CreateDishRequest;
 import be.kdg.backend.restaurant.adapter.in.dto.DishResponse;
 import be.kdg.backend.restaurant.adapter.in.dto.EditDishRequest;
 import be.kdg.backend.restaurant.domain.DishType;
 import be.kdg.backend.restaurant.domain.FoodTag;
-import be.kdg.backend.restaurant.port.in.EditDishUseCase;
-import be.kdg.backend.restaurant.port.in.LoadDishesByRestaurantUseCase;
-import be.kdg.backend.restaurant.port.in.PublishDishUseCase;
+import be.kdg.backend.restaurant.port.in.*;
 import be.kdg.backend.restaurant.port.in.request.EditDishCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/dishes")
@@ -27,11 +28,15 @@ public class DishController {
     private final EditDishUseCase editDishUseCase;
     private final PublishDishUseCase publishDishUseCase;
     private final LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase;
+    private final UnpublishDishUseCase unpublishDishUseCase;
+    private final CreateDishUseCase createDishUseCase;
 
-    public DishController(EditDishUseCase editDishUseCase, PublishDishUseCase publishDishUseCase, LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase) {
+    public DishController(EditDishUseCase editDishUseCase, PublishDishUseCase publishDishUseCase, LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase, UnpublishDishUseCase unpublishDishUseCase, CreateDishUseCase createDishUseCase) {
         this.editDishUseCase = editDishUseCase;
         this.publishDishUseCase = publishDishUseCase;
         this.loadDishesByRestaurantUseCase = loadDishesByRestaurantUseCase;
+        this.unpublishDishUseCase = unpublishDishUseCase;
+        this.createDishUseCase = createDishUseCase;
     }
 
     @GetMapping
@@ -47,6 +52,21 @@ public class DishController {
 
         return ResponseEntity.ok(dishes);
     }
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('owner')")
+    public ResponseEntity<List<DishResponse>> getAllDishesForOwner(
+            @PathVariable("restaurantId") UUID restaurantId) {
+
+        List<DishResponse> dishes = loadDishesByRestaurantUseCase
+                .loadAllByRestaurantId(restaurantId)
+                .stream()
+                .map(DishResponse::fromDomain)
+                .toList();
+        log.info("Loaded dishes for the restaurantId: {}", restaurantId);
+
+        return ResponseEntity.ok(dishes);
+    }
+
 
     @PutMapping("/{dishId}")
     public ResponseEntity<UUID> editDraftDish(@PathVariable UUID restaurantId,
@@ -118,6 +138,46 @@ public class DishController {
                 .toUpperCase();
     }
 
+    @PostMapping("/{dishId}/unpublish")
+    public ResponseEntity<?> unpublishDish(@PathVariable UUID restaurantId, @PathVariable UUID dishId) {
+        log.info("Unpublishing dish {} for restaurant {}", dishId, restaurantId);
+        try {
+            unpublishDishUseCase.unpublishDish(restaurantId, dishId);
+            return ResponseEntity.ok("Dish unpublished successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("Cannot unpublish dish: " + e.getMessage());
+        }
+    }
+    @PostMapping
+    public ResponseEntity<UUID> createDish(
+            @PathVariable UUID restaurantId,
+            @RequestBody CreateDishRequest request) {
+
+        var type = DishType.valueOf(toEnumConstant(request.type()));
+
+        var tags = request.foodTags() == null
+                ? Set.<FoodTag>of()
+                : request.foodTags().stream()
+                .map(tag -> FoodTag.valueOf(toEnumConstant(tag)))
+                .collect(Collectors.toSet());
+
+        var command = new CreateDishCommand(
+                restaurantId,
+                request.name(),
+                type,
+                tags,
+                request.description(),
+                request.price(),
+                request.pictureUrl()
+        );
+
+        log.info("Create dish {} for restaurant {}", command, restaurantId);
+
+        UUID dishId = createDishUseCase.createDish(command);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dishId);
+    }
 
 
     @ExceptionHandler(IllegalArgumentException.class)

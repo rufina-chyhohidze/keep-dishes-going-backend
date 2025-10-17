@@ -1,9 +1,8 @@
 package be.kdg.backend.restaurant.domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
+
 //agregate root
 public class Menu {
     private final UUID menuId;
@@ -34,9 +33,27 @@ public class Menu {
         return Collections.unmodifiableList(dishes);
     }
 
+    public Dish addDish(
+            String name,
+            DishType type,
+            Set<FoodTag> tags,
+            String description,
+            BigDecimal price,
+            String pictureUrl
+    ) {
+        if (dishes.size() >= 20) {
+            throw new IllegalStateException("Cannot have more than 20 dishes.");
+        }
+
+        Dish dish = Dish.draft(this.restaurantId, name, type, tags, description, price, pictureUrl);
+        this.dishes.add(dish);
+        return dish;
+    }
+
     public void addDish(Dish dish) {
         this.dishes.add(dish);
     }
+
 
     public void publishDish(UUID dishId) {
         Dish dish = findDishById(dishId);
@@ -61,4 +78,15 @@ public class Menu {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Dish not found: " + dishId));
     }
+
+    public void unpublishDish(UUID dishId) {
+        Dish dish = findDishById(dishId);
+
+        if (dish.getAvailability() != DishAvailability.PUBLISHED) {
+            throw new IllegalStateException("Only published dishes can be unpublished.");
+        }
+
+        dish.unpublish();
+    }
+
 }

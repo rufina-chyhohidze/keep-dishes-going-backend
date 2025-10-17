@@ -17,12 +17,27 @@ public class LoadDishesByRestaurantUseCaseImpl implements LoadDishesByRestaurant
         this.loadDishPort = loadDishPort;
     }
 
+    /**
+     * For customer, to see only published dishes
+     * @param restaurantId
+     * @return
+     */
     @Override
     public List<Dish> loadByRestaurantId(UUID restaurantId) {
         return loadDishPort.loadByRestaurantId(restaurantId)
                 .stream()
                 .filter(d -> d.getAvailability() == DishAvailability.PUBLISHED)
                 .toList();
+    }
+
+    /**
+     * For owner, to see all dishes he created at all states
+     * @param restaurantId
+     * @return
+     */
+    @Override
+    public List<Dish> loadAllByRestaurantId(UUID restaurantId) {
+        return loadDishPort.loadByRestaurantId(restaurantId);
     }
 
 }

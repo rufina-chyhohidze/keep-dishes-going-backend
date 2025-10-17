@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface LoadDishPort {
     Optional<Dish> loadById(UUID dishId);
     List<Dish> loadByRestaurantId(UUID restaurantId);
+    Optional<Dish> loadByIdAndRestaurantId(UUID dishId, UUID restaurantId);
 }

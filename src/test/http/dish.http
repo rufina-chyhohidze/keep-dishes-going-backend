@@ -55,3 +55,61 @@ Content-Type: application/json\
 ###  Try to publish the 11th dish (should return 409 Conflict)
 POST http://localhost:8080/restaurants/396591b9-4b97-4354-a8b1-0e15372bc09d/dishes/ffffffff-1111-2222-3333-444444449999/publish
 Content-Type: application/json
+###
+
+
+
+
+
+//to get the code:
+//http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/auth?client_id=backend-client&response_type=code&scope=openid&redirect_uri=http://localhost:3333/callback
+//then paste the code here with loged in owner
+//code expires each 30 min
+POST http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=backend-client
+    &client_secret=C1Ur8iF2SPSu3CtTx0tKsidAvmhRTiba
+    &grant_type=authorization_code
+    &scope=openid
+    &redirect_uri=http://localhost:3333/callback
+    &code=c79a5e61-e95e-4434-bf00-04b947b557ce.d41ead71-7675-4f0d-bbbe-d74cc6a03510.c3c0fda5-d051-439c-916b-f8ff9c2fb328
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+###
+
+POST http://localhost:8080/restaurants/c15ad6b1-f002-44a1-9211-df3c55f7ca41/dishes/ffffffff-1111-2222-3333-444444449999/publish
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+GET http://localhost:8080/restaurants/c15ad6b1-f002-44a1-9211-df3c55f7ca41/dishes
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### add a dish in draft state first
+POST http://localhost:8080/restaurants/64137cb6-c0a9-4338-9545-5847756a0ea7/dishes
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "Margherita Pizza",
+  "type": "MAIN",
+  "foodTags": ["VEGETARIAN"],
+  "description": "Classic pizza with tomato sauce, mozzarella, and basil",
+  "price": 12.50,
+  "pictureUrl": "https://www.thedailymeal.com/img/gallery/14-underated-cheeses-you-need-to-try-on-pizza/l-intro-1677441572.jpg"
+}
+
+###PUBLISH A DISH
+POST http://localhost:8080/restaurants/64137cb6-c0a9-4338-9545-5847756a0ea7/dishes/afa29845-6b56-4bca-8804-073ee9b332c6/publish
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### unpublish a dish
+POST http://localhost:8080/restaurants/64137cb6-c0a9-4338-9545-5847756a0ea7/dishes/afa29845-6b56-4bca-8804-073ee9b332c6/unpublish
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+

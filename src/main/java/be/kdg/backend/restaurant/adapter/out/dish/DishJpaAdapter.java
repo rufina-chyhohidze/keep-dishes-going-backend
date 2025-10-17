@@ -44,6 +44,12 @@ public class DishJpaAdapter  implements LoadDishPort, SaveDishPort {
         repository.save(dishMapper.toEntity(dish));
         return dish;
     }
+    @Override
+    public Optional<Dish> loadByIdAndRestaurantId(UUID dishId, UUID restaurantId) {
+        return repository.findByDishIdAndRestaurantId(dishId, restaurantId)
+                .map(dishMapper::toDomain);
+    }
+
 
 
 }
