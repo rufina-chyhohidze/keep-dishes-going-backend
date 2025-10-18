@@ -4,7 +4,6 @@ package be.kdg.backend.restaurant.adapter.out.dish;
 import be.kdg.backend.restaurant.adapter.out.dish.enums.DishJpaAvailability;
 import be.kdg.backend.restaurant.adapter.out.dish.enums.FoodJpaTag;
 import be.kdg.backend.restaurant.adapter.out.dish.enums.StockJpaStatus;
-import be.kdg.backend.restaurant.domain.DishAvailability;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

@@ -30,13 +30,15 @@ public class DishController {
     private final LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase;
     private final UnpublishDishUseCase unpublishDishUseCase;
     private final CreateDishUseCase createDishUseCase;
+    private final UpdateStockStatusUseCase updateStockStatusUseCase;
 
-    public DishController(EditDishUseCase editDishUseCase, PublishDishUseCase publishDishUseCase, LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase, UnpublishDishUseCase unpublishDishUseCase, CreateDishUseCase createDishUseCase) {
+    public DishController(EditDishUseCase editDishUseCase, PublishDishUseCase publishDishUseCase, LoadDishesByRestaurantUseCase loadDishesByRestaurantUseCase, UnpublishDishUseCase unpublishDishUseCase, CreateDishUseCase createDishUseCase, UpdateStockStatusUseCase updateStockStatusUseCase) {
         this.editDishUseCase = editDishUseCase;
         this.publishDishUseCase = publishDishUseCase;
         this.loadDishesByRestaurantUseCase = loadDishesByRestaurantUseCase;
         this.unpublishDishUseCase = unpublishDishUseCase;
         this.createDishUseCase = createDishUseCase;
+        this.updateStockStatusUseCase = updateStockStatusUseCase;
     }
 
     @GetMapping
@@ -100,20 +102,6 @@ public class DishController {
         }
     }
 
-    private Set<FoodTag> parseFoodTags(Iterable<String> rawTags) {
-        if (rawTags == null) return EnumSet.noneOf(FoodTag.class);
-
-        Set<FoodTag> tags = EnumSet.noneOf(FoodTag.class);
-        for (String raw : rawTags) {
-            String normalized = toEnumConstant(raw);
-            try {
-                tags.add(FoodTag.valueOf(normalized));
-            } catch (Exception ex) {
-                throw new IllegalArgumentException("Unknown food tag: " + raw);
-            }
-        }
-        return tags;
-    }
 
     @PostMapping("/{dishId}/publish")
     public ResponseEntity<?> publishDish(@PathVariable UUID restaurantId, @PathVariable UUID dishId) {
@@ -126,16 +114,6 @@ public class DishController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    private String toEnumConstant(String input) {
-        if (input == null) return null;
-        String withUnderscore = input.replaceAll("([a-z])([A-Z])", "$1_$2");
-        return withUnderscore.trim()
-                .replace('-', ' ')
-                .replace('_', ' ')
-                .replaceAll("\\s+", "_")
-                .toUpperCase();
     }
 
     @PostMapping("/{dishId}/unpublish")
@@ -177,6 +155,47 @@ public class DishController {
 
         UUID dishId = createDishUseCase.createDish(command);
         return ResponseEntity.status(HttpStatus.CREATED).body(dishId);
+    }
+
+    @PostMapping("/{dishId}/out-of-stock")
+    @PreAuthorize("hasAuthority('owner')")
+    public ResponseEntity<?> markDishOutOfStock(@PathVariable UUID dishId, @PathVariable UUID restaurantId) {
+        updateStockStatusUseCase.markOutOfStock(dishId, restaurantId);
+        log.info("Dish marked out of stock for restaurant {} ", restaurantId);
+        return ResponseEntity.ok("Dish marked as out of stock.");
+    }
+
+    @PostMapping("/{dishId}/in-stock")
+    @PreAuthorize("hasAuthority('owner')")
+    public ResponseEntity<?> markDishInStock(@PathVariable UUID dishId, @PathVariable UUID restaurantId) {
+        updateStockStatusUseCase.markInStock(dishId, restaurantId);
+        log.info("Dish marked as in-stock.");
+        return ResponseEntity.ok("Dish marked as in stock for restaurant " + restaurantId);
+    }
+
+    private Set<FoodTag> parseFoodTags(Iterable<String> rawTags) {
+        if (rawTags == null) return EnumSet.noneOf(FoodTag.class);
+
+        Set<FoodTag> tags = EnumSet.noneOf(FoodTag.class);
+        for (String raw : rawTags) {
+            String normalized = toEnumConstant(raw);
+            try {
+                tags.add(FoodTag.valueOf(normalized));
+            } catch (Exception ex) {
+                throw new IllegalArgumentException("Unknown food tag: " + raw);
+            }
+        }
+        return tags;
+    }
+
+    private String toEnumConstant(String input) {
+        if (input == null) return null;
+        String withUnderscore = input.replaceAll("([a-z])([A-Z])", "$1_$2");
+        return withUnderscore.trim()
+                .replace('-', ' ')
+                .replace('_', ' ')
+                .replaceAll("\\s+", "_")
+                .toUpperCase();
     }
 
 
