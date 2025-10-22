@@ -1,0 +1,34 @@
+package be.kdg.backend.order.core;
+
+import be.kdg.backend.order.domain.Order;
+import be.kdg.backend.order.port.in.MarkOrderReadyUseCase;
+import be.kdg.backend.order.port.out.LoadOrderPort;
+import be.kdg.backend.order.port.out.SaveOrderPort;
+import jakarta.transaction.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+@Transactional
+public class MarkOrderReadyUseCaseImpl implements MarkOrderReadyUseCase {
+
+    private final LoadOrderPort loadOrderPort;
+    private final SaveOrderPort saveOrderPort;
+    private final ApplicationEventPublisher publisher;
+
+    public MarkOrderReadyUseCaseImpl(LoadOrderPort loadOrderPort, SaveOrderPort saveOrderPort, ApplicationEventPublisher publisher) {
+        this.loadOrderPort = loadOrderPort;
+        this.saveOrderPort = saveOrderPort;
+        this.publisher = publisher;
+    }
+
+    @Override
+    public void markReady(UUID orderId) {
+        Order order = loadOrderPort.load(orderId);
+        order.markReady();
+        saveOrderPort.save(order);
+        order.getDomainEvents().forEach(publisher::publishEvent);
+    }
+}

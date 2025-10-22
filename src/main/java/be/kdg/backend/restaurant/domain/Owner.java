@@ -1,6 +1,5 @@
 package be.kdg.backend.restaurant.domain;
 
-import be.kdg.backend.common.events.OwnerRegisteredEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +22,6 @@ public class Owner {
     public UUID getId() { return id; }
     public String getEmail() { return email; }
     public String getName() { return name; }
-    public List<Object> getDomainEvents() { return Collections.unmodifiableList(domainEvents); }
 
     @Override
     public String toString() {

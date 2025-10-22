@@ -61,6 +61,7 @@ client_id=backend-client
 %}
 
 ###
+
 ### Toggle restaurant open/closed
 PUT http://localhost:8080/restaurants/2e55a3a2-0410-447c-9b31-0198aab192fd/toggle
 Authorization: Bearer {{access_token}}

@@ -5,6 +5,7 @@ import be.kdg.backend.order.domain.OrderLine;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,10 +28,11 @@ public class OrderJpaEntity {
     private double totalPrice;
     private String status;
 
-    // payment
     private UUID paymentId;
     private String provider;
     private String paymentStatus;
+    private Instant createdAt;
+
 
     @ElementCollection
     @CollectionTable(name = "order_lines", schema = "kdg_order",
@@ -42,7 +44,6 @@ public class OrderJpaEntity {
     public OrderJpaEntity(Order order) {
         this.orderId = order.getOrderId();
         this.restaurantId = order.getRestaurantId();
-
         this.name = order.getCustomerInfo().name();
         this.email = order.getCustomerInfo().email();
         this.street = order.getCustomerInfo().street();
@@ -56,8 +57,8 @@ public class OrderJpaEntity {
 
         this.paymentId = order.getPaymentInfo().getPaymentId();
         this.provider = order.getPaymentInfo().getProvider();
+        this.createdAt = order.getCreatedAt();
         this.paymentStatus = order.getPaymentInfo().getStatus().name();
-
         this.orderLines = order.getOrderLines().stream()
                 .map(OrderLineEmbeddable::new)
                 .toList();
@@ -65,6 +66,23 @@ public class OrderJpaEntity {
     public UUID getOrderId() {
         return orderId;
     }
+    public UUID getRestaurantId() { return restaurantId; }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public String getStreet() { return street; }
+    public String getNumber() { return number; }
+    public String getPostalCode() { return postalCode; }
+    public String getCity() { return city; }
+    public String getCountry() { return country; }
+    public double getTotalPrice() { return totalPrice; }
+    public String getStatus() { return status; }
+    public UUID getPaymentId() { return paymentId; }
+    public String getProvider() { return provider; }
+    public String getPaymentStatus() { return paymentStatus; }
+    public Instant getCreatedAt() { return createdAt; }
+    public List<OrderLineEmbeddable> getOrderLines() { return orderLines; }
+
+
 }
 
 
@@ -76,9 +94,14 @@ class OrderLineEmbeddable {
 
     protected OrderLineEmbeddable() {}
 
-    OrderLineEmbeddable(OrderLine line) {
+    public OrderLineEmbeddable(OrderLine line) {
         this.dishId = line.dishId();
         this.quantity = line.quantity();
         this.priceAtCheckout = line.priceAtCheckout();
     }
+
+    public UUID getDishId() { return dishId; }
+    public int getQuantity() { return quantity; }
+    public BigDecimal getPriceAtCheckout() { return priceAtCheckout; }
 }
+

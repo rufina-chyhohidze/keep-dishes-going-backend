@@ -5,6 +5,7 @@ import be.kdg.backend.order.domain.Order;
 import be.kdg.backend.order.port.in.PlaceOrderUseCase;
 import be.kdg.backend.order.port.in.request.PlaceOrderCommand;
 import be.kdg.backend.order.port.out.SaveOrderPort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class PlaceOrderUseCaseImpl implements PlaceOrderUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(PlaceOrderUseCaseImpl.class);

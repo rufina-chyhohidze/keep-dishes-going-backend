@@ -41,3 +41,37 @@ Content-Type: application/json
     "status": "PENDING"
   }
 }
+###
+//http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/auth?client_id=backend-client&response_type=code&scope=openid&redirect_uri=http://localhost:3333/callback
+
+POST http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=backend-client
+    &client_secret=C1Ur8iF2SPSu3CtTx0tKsidAvmhRTiba
+    &grant_type=authorization_code
+    &scope=openid
+    &redirect_uri=http://localhost:3333/callback
+    &code=8cd314dd-515e-4a06-b13e-5408d2e51d04.7acc43ff-c2a8-4428-9b19-9298606b4252.c3c0fda5-d051-439c-916b-f8ff9c2fb328
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+### accept an order
+POST http://localhost:8080/api/orders/5dede5a4-ad27-4573-aaba-b1b5bfb1cab0/accept
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### reject with reason
+POST http://localhost:8080/api/orders/58253fb0-c61e-4e0a-9925-e34639f52dfd/reject
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "reason": "Restaurant is closed"
+}
+### mark as ready for pick up( only for accepted orders)
+POST http://localhost:8080/api/orders/5dede5a4-ad27-4573-aaba-b1b5bfb1cab0/ready
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
