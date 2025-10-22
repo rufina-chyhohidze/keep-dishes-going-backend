@@ -20,12 +20,6 @@ public class Owner {
         this.name = name;
     }
 
-    public static Owner register(String email, String name) {
-        Owner owner = new Owner(UUID.randomUUID(), email, name);
-        owner.domainEvents.add(new OwnerRegisteredEvent(owner.id, owner.email));
-        return owner;
-    }
-
     public UUID getId() { return id; }
     public String getEmail() { return email; }
     public String getName() { return name; }

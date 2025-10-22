@@ -4,6 +4,7 @@ import be.kdg.backend.restaurant.adapter.in.dto.OwnerDto;
 import be.kdg.backend.restaurant.domain.Owner;
 import be.kdg.backend.restaurant.domain.Restaurant;
 import be.kdg.backend.restaurant.port.out.LoadOwnerPort;
+import be.kdg.backend.restaurant.port.out.LoadRestaurantByOwnerId;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantPort;
 import be.kdg.backend.restaurant.port.out.SaveOwnerPort;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ import java.util.UUID;
 public class OwnerController {
     private final LoadOwnerPort loadOwnerPort;
     private final SaveOwnerPort saveOwnerPort;
-    private final LoadRestaurantPort loadRestaurantPort;
+    private final LoadRestaurantByOwnerId loadRestaurantByOwnerId;
 
-    public OwnerController(LoadOwnerPort loadOwnerPort, SaveOwnerPort saveOwnerPort, LoadRestaurantPort loadRestaurantPort) {
+    public OwnerController(LoadOwnerPort loadOwnerPort, SaveOwnerPort saveOwnerPort,LoadRestaurantByOwnerId loadRestaurantByOwnerId) {
         this.loadOwnerPort = loadOwnerPort;
         this.saveOwnerPort = saveOwnerPort;
-        this.loadRestaurantPort = loadRestaurantPort;
+        this.loadRestaurantByOwnerId = loadRestaurantByOwnerId;
     }
 
     /**
@@ -69,7 +70,7 @@ public class OwnerController {
     @PreAuthorize("hasAuthority('owner')")
     public ResponseEntity<Restaurant> getRestaurantForCurrentOwner(@AuthenticationPrincipal Jwt jwt) {
         UUID ownerId = UUID.fromString(jwt.getSubject());
-        return loadRestaurantPort.loadByOwnerId(ownerId)
+        return loadRestaurantByOwnerId.loadByOwnerId(ownerId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

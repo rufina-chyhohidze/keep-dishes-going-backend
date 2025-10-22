@@ -2,6 +2,7 @@ package be.kdg.backend.restaurant.adapter.out.restaurant;
 
 import be.kdg.backend.restaurant.adapter.out.mapper.RestaurantMapper;
 import be.kdg.backend.restaurant.domain.Restaurant;
+import be.kdg.backend.restaurant.port.out.LoadRestaurantByOwnerId;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantPort;
 import be.kdg.backend.restaurant.port.out.SaveRestaurantPort;
 import be.kdg.backend.restaurant.port.out.UpdateRestaurantStatusPort;
@@ -15,7 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
-public class RestaurantJpaAdapter implements LoadRestaurantPort, SaveRestaurantPort, UpdateRestaurantStatusPort {
+public class RestaurantJpaAdapter implements LoadRestaurantPort, SaveRestaurantPort, UpdateRestaurantStatusPort, LoadRestaurantByOwnerId {
     private static final Logger log = LoggerFactory.getLogger(RestaurantJpaAdapter.class);
 
     private final RestaurantJpaRepository restaurantRepository;

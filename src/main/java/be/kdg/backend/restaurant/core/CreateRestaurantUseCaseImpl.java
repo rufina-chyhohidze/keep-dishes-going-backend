@@ -4,6 +4,7 @@ import be.kdg.backend.restaurant.domain.Menu;
 import be.kdg.backend.restaurant.domain.Restaurant;
 import be.kdg.backend.restaurant.port.in.CreateRestaurantUseCase;
 import be.kdg.backend.restaurant.port.in.request.CreateRestaurantCommand;
+import be.kdg.backend.restaurant.port.out.LoadRestaurantByOwnerId;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantPort;
 import be.kdg.backend.restaurant.port.out.SaveMenuPort;
 import be.kdg.backend.restaurant.port.out.SaveRestaurantPort;
@@ -18,17 +19,17 @@ public class CreateRestaurantUseCaseImpl implements CreateRestaurantUseCase {
 
     private Logger logger = LoggerFactory.getLogger(CreateRestaurantUseCaseImpl.class);
 
-    private final LoadRestaurantPort loadRestaurantPort;
     private final SaveRestaurantPort saveRestaurantPort;
     private final SaveMenuPort saveMenuPort;
-    public CreateRestaurantUseCaseImpl(LoadRestaurantPort loadRestaurantPort, SaveRestaurantPort saveRestaurantPort, SaveMenuPort saveMenuPort) {
-        this.loadRestaurantPort = loadRestaurantPort;
+    private final LoadRestaurantByOwnerId loadRestaurantByOwnerId;
+    public CreateRestaurantUseCaseImpl(SaveRestaurantPort saveRestaurantPort, SaveMenuPort saveMenuPort, LoadRestaurantByOwnerId loadRestaurantByOwnerId) {
         this.saveRestaurantPort = saveRestaurantPort;
         this.saveMenuPort = saveMenuPort;
+        this.loadRestaurantByOwnerId = loadRestaurantByOwnerId;
     }
     @Override
     public UUID createRestaurant(CreateRestaurantCommand command) {
-        loadRestaurantPort.loadByOwnerId(command.ownerId()).ifPresent(existing -> {
+        loadRestaurantByOwnerId.loadByOwnerId(command.ownerId()).ifPresent(existing -> {
             logger.warn("Owner {} already has a restaurant with ID {}",
                     command.ownerId(), existing.getRestaurantId());
             throw new IllegalArgumentException("Owner already has a restaurant");
