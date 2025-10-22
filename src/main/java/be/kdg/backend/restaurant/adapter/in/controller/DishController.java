@@ -1,8 +1,8 @@
-package be.kdg.backend.restaurant.adapter.in;
+package be.kdg.backend.restaurant.adapter.in.controller;
 
-import be.kdg.backend.restaurant.adapter.in.dto.CreateDishRequest;
-import be.kdg.backend.restaurant.adapter.in.dto.DishResponse;
-import be.kdg.backend.restaurant.adapter.in.dto.EditDishRequest;
+import be.kdg.backend.restaurant.adapter.in.requests.CreateDishRequest;
+import be.kdg.backend.restaurant.adapter.in.response.DishResponse;
+import be.kdg.backend.restaurant.adapter.in.requests.EditDishRequest;
 import be.kdg.backend.restaurant.domain.DishType;
 import be.kdg.backend.restaurant.domain.FoodTag;
 import be.kdg.backend.restaurant.port.in.*;

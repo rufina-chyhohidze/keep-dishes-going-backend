@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.adapter.in;
+package be.kdg.backend.restaurant.adapter.in.controller;
 
 import be.kdg.backend.restaurant.adapter.in.dto.OwnerDto;
 import be.kdg.backend.restaurant.domain.Owner;

@@ -11,7 +11,8 @@ public record RestaurantDto (UUID restaurantId,
                              Address address,
                              String contactEmail,
                              String pictureUrl,
-                             String typeOfCuisine,
+                             String cuisineType,
                              int defaultPreparationTime,
-                             OpeningHours openingHours){
+                             OpeningHours openingHours,
+         boolean isOpen ){
 }

@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.adapter.in.dto;
+package be.kdg.backend.restaurant.adapter.in.requests;
 
 import java.math.BigDecimal;
 import java.util.List;

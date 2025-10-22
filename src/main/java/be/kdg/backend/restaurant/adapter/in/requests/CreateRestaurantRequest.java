@@ -1,7 +1,6 @@
-package be.kdg.backend.restaurant.adapter.in.dto;
+package be.kdg.backend.restaurant.adapter.in.requests;
 
 import java.util.Map;
-import java.util.UUID;
 
 public record CreateRestaurantRequest(
         String restaurantName,

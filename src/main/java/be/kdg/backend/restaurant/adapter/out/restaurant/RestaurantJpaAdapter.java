@@ -4,6 +4,7 @@ import be.kdg.backend.restaurant.adapter.out.mapper.RestaurantMapper;
 import be.kdg.backend.restaurant.domain.Restaurant;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantPort;
 import be.kdg.backend.restaurant.port.out.SaveRestaurantPort;
+import be.kdg.backend.restaurant.port.out.UpdateRestaurantStatusPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
-public class RestaurantJpaAdapter implements LoadRestaurantPort, SaveRestaurantPort {
+public class RestaurantJpaAdapter implements LoadRestaurantPort, SaveRestaurantPort, UpdateRestaurantStatusPort {
     private static final Logger log = LoggerFactory.getLogger(RestaurantJpaAdapter.class);
 
     private final RestaurantJpaRepository restaurantRepository;
@@ -46,4 +47,18 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, SaveRestaurantP
                 .map(restaurantMapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Optional<Restaurant> loadById(UUID restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .map(restaurantMapper::toDomain);
+    }
+
+    @Override
+    public void saveStatus(Restaurant restaurant) {
+        RestaurantJpaEntity entity = restaurantMapper.toEntity(restaurant);
+        restaurantRepository.save(entity);
+        log.info("Updated open status for restaurant {} to {}", entity.getRestaurantId(), entity.isOpen());
+    }
+
 }

@@ -44,5 +44,24 @@ Content-Type: application/json
   }
 }
 
+###
+//http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/auth?client_id=backend-client&response_type=code&scope=openid&redirect_uri=http://localhost:3333/callback
+
+POST http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=backend-client
+    &client_secret=C1Ur8iF2SPSu3CtTx0tKsidAvmhRTiba
+    &grant_type=authorization_code
+    &scope=openid
+    &redirect_uri=http://localhost:3333/callback
+    &code=b4525c61-a9d3-4b94-9c64-df0057d8eb6c.95bab4a5-2c65-4503-a20f-89cb6a636157.c3c0fda5-d051-439c-916b-f8ff9c2fb328
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
 
 ###
+### Toggle restaurant open/closed
+PUT http://localhost:8080/restaurants/2e55a3a2-0410-447c-9b31-0198aab192fd/toggle
+Authorization: Bearer {{access_token}}
+Content-Type: application/json

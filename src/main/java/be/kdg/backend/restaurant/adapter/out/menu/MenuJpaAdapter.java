@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.adapter.out;
+package be.kdg.backend.restaurant.adapter.out.menu;
 
 import be.kdg.backend.restaurant.adapter.out.dish.DishJpaRepository;
 import be.kdg.backend.restaurant.adapter.out.mapper.DishMapper;

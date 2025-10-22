@@ -1,6 +1,5 @@
-package be.kdg.backend.restaurant.adapter.in.dto;
+package be.kdg.backend.restaurant.adapter.in.response;
 
-import be.kdg.backend.restaurant.adapter.out.dish.DishJpaEntity;
 import be.kdg.backend.restaurant.domain.Dish;
 import be.kdg.backend.restaurant.domain.DishAvailability;
 import be.kdg.backend.restaurant.domain.StockStatus;

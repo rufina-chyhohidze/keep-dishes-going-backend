@@ -1,6 +1,6 @@
 package be.kdg.backend.restaurant.adapter.out.mapper;
 
-import be.kdg.backend.restaurant.adapter.out.MenuJpaEntity;
+import be.kdg.backend.restaurant.adapter.out.menu.MenuJpaEntity;
 import be.kdg.backend.restaurant.domain.Menu;
 import org.springframework.stereotype.Component;
 

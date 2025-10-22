@@ -1,4 +1,4 @@
-package be.kdg.backend.restaurant.adapter.out;
+package be.kdg.backend.restaurant.adapter.out.menu;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
