@@ -11,7 +11,10 @@ import be.kdg.backend.order.port.in.AcceptOrderUseCase;
 import be.kdg.backend.order.port.in.MarkOrderReadyUseCase;
 import be.kdg.backend.order.port.in.PlaceOrderUseCase;
 import be.kdg.backend.order.port.in.RejectOrderUseCase;
+import be.kdg.backend.order.port.in.request.AcceptOrderCommand;
+import be.kdg.backend.order.port.in.request.MarkOrderReadyCommand;
 import be.kdg.backend.order.port.in.request.PlaceOrderCommand;
+import be.kdg.backend.order.port.in.request.RejectOrderCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -79,21 +82,22 @@ public class OrderController {
     }
     @PostMapping("/{orderId}/accept")
     public ResponseEntity<Void> acceptOrder(@PathVariable UUID orderId) {
-        acceptOrderUseCase.acceptOrder(orderId);
+        acceptOrderUseCase.acceptOrder(new AcceptOrderCommand(orderId));
         log.info("Order {} accepted", orderId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{orderId}/reject")
     public ResponseEntity<Void> rejectOrder(@PathVariable UUID orderId, @RequestBody RejectOrderRequest request) {
-        rejectOrderUseCase.rejectOrder(orderId, request.reason());
+        RejectOrderCommand command = new RejectOrderCommand(orderId, request.reason());
+        rejectOrderUseCase.rejectOrder(command);
         log.info("Order {} rejected with reason: {}", orderId, request.reason());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{orderId}/ready")
-    public ResponseEntity<Void> markReady(@PathVariable UUID orderId) {
-        markOrderReadyUseCase.markReady(orderId);
+    public ResponseEntity<Void> markOrderReady(@PathVariable UUID orderId) {
+        markOrderReadyUseCase.markOrderReady(new MarkOrderReadyCommand(orderId));
         log.info("Order {} marked as ready", orderId);
         return ResponseEntity.ok().build();
     }

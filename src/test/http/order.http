@@ -52,18 +52,18 @@ client_id=backend-client
     &grant_type=authorization_code
     &scope=openid
     &redirect_uri=http://localhost:3333/callback
-    &code=8cd314dd-515e-4a06-b13e-5408d2e51d04.7acc43ff-c2a8-4428-9b19-9298606b4252.c3c0fda5-d051-439c-916b-f8ff9c2fb328
+    &code=5ffb993b-36f2-493d-a4d8-7264e1247951.c3dbfe10-d9f4-4245-a7b0-1e916410b639.c3c0fda5-d051-439c-916b-f8ff9c2fb328
 > {%
     client.global.set("access_token", response.body.access_token);
 %}
 
 ### accept an order
-POST http://localhost:8080/api/orders/5dede5a4-ad27-4573-aaba-b1b5bfb1cab0/accept
+POST http://localhost:8080/api/orders/9a26749a-e66f-4824-ba74-4194025b2dc1/accept
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ### reject with reason
-POST http://localhost:8080/api/orders/58253fb0-c61e-4e0a-9925-e34639f52dfd/reject
+POST http://localhost:8080/api/orders/56130e1e-1537-445c-9469-891c56a497bd/reject
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -71,7 +71,7 @@ Content-Type: application/json
   "reason": "Restaurant is closed"
 }
 ### mark as ready for pick up( only for accepted orders)
-POST http://localhost:8080/api/orders/5dede5a4-ad27-4573-aaba-b1b5bfb1cab0/ready
+POST http://localhost:8080/api/orders/9a26749a-e66f-4824-ba74-4194025b2dc1/ready
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 

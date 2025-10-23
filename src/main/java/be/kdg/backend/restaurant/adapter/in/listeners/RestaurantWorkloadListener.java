@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * listen -> delegate ->log
+ */
 @Component
 public class RestaurantWorkloadListener {
     private static final Logger log = LoggerFactory.getLogger(RestaurantWorkloadListener.class);

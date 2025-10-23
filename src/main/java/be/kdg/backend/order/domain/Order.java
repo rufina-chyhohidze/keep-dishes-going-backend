@@ -65,6 +65,7 @@ public class Order {
         return orderLines.stream().mapToDouble(OrderLine::totalPrice).sum();
     }
 
+    //We record domain events inside the aggregate, not publish them directly.
     public void accept() {
         if (status != OrderStatus.PLACED) throw new IllegalStateException("Cannot accept non-placed order");
         this.status = OrderStatus.ACCEPTED;
