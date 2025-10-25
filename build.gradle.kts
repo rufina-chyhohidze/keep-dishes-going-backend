@@ -12,6 +12,7 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    modularity.inferModulePath = false
 }
 
 repositories {
@@ -29,6 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
     testImplementation("org.springframework.security:spring-security-test")
     annotationProcessor ("org.mapstruct:mapstruct-processor:1.5.5.Final")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

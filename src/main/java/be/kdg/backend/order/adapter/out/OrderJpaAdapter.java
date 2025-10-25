@@ -27,10 +27,11 @@ public class OrderJpaAdapter implements SaveOrderPort, LoadOrderPort, LoadPendin
 
     @Override
     public Order load(UUID orderId) {
-        return repo.findById(orderId)
+        return repo.findByOrderId(orderId)
                 .map(this::toDomain)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
     }
+
     @Override
     public List<Order> findPendingOlderThan(Duration maxAge) {
         Instant threshold = Instant.now().minus(maxAge);
