@@ -7,10 +7,7 @@ import be.kdg.backend.order.domain.CustomerInfo;
 import be.kdg.backend.order.domain.OrderLine;
 import be.kdg.backend.order.domain.Payment;
 import be.kdg.backend.order.domain.PaymentStatus;
-import be.kdg.backend.order.port.in.AcceptOrderUseCase;
-import be.kdg.backend.order.port.in.MarkOrderReadyUseCase;
-import be.kdg.backend.order.port.in.PlaceOrderUseCase;
-import be.kdg.backend.order.port.in.RejectOrderUseCase;
+import be.kdg.backend.order.port.in.*;
 import be.kdg.backend.order.port.in.request.AcceptOrderCommand;
 import be.kdg.backend.order.port.in.request.MarkOrderReadyCommand;
 import be.kdg.backend.order.port.in.request.PlaceOrderCommand;
@@ -32,12 +29,14 @@ public class OrderController {
     private final AcceptOrderUseCase acceptOrderUseCase;
     private final RejectOrderUseCase rejectOrderUseCase;
     private final MarkOrderReadyUseCase markOrderReadyUseCase;
+    private final CreatePaymentLinkUseCase createPaymentLinkUseCase;
 
-    public OrderController(PlaceOrderUseCase placeOrderUseCase,AcceptOrderUseCase acceptOrderUseCase,RejectOrderUseCase rejectOrderUseCase,MarkOrderReadyUseCase markOrderReadyUseCase) {
+    public OrderController(PlaceOrderUseCase placeOrderUseCase,AcceptOrderUseCase acceptOrderUseCase,RejectOrderUseCase rejectOrderUseCase,MarkOrderReadyUseCase markOrderReadyUseCase,CreatePaymentLinkUseCase createPaymentLinkUseCase) {
         this.placeOrderUseCase = placeOrderUseCase;
         this.acceptOrderUseCase = acceptOrderUseCase;
         this.rejectOrderUseCase = rejectOrderUseCase;
         this.markOrderReadyUseCase = markOrderReadyUseCase;
+        this.createPaymentLinkUseCase = createPaymentLinkUseCase;
     }
 
     @PostMapping
@@ -100,5 +99,10 @@ public class OrderController {
         markOrderReadyUseCase.markOrderReady(new MarkOrderReadyCommand(orderId));
         log.info("Order {} marked as ready", orderId);
         return ResponseEntity.ok().build();
+    }
+    @PostMapping("/{orderId}/payment")
+    public ResponseEntity<String> createPaymentLink(@PathVariable UUID orderId) {
+        String url = createPaymentLinkUseCase.createPaymentLink(orderId);
+        return ResponseEntity.ok(url);
     }
 }

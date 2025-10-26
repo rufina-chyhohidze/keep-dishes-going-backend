@@ -31,12 +31,17 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("com.stripe:stripe-java:24.19.0")
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("org.projectlombok:lombok")
+    implementation("me.paulschwarz:spring-dotenv:4.0.0")
     testImplementation("org.springframework.security:spring-security-test")
     annotationProcessor ("org.mapstruct:mapstruct-processor:1.5.5.Final")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.modulith:spring-modulith-starter-test")
     runtimeOnly("org.postgresql:postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 
 }
 

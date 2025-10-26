@@ -33,6 +33,7 @@ public class SecurityConfig  {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/webhooks/stripe").permitAll()
                         .requestMatchers("/restaurants/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/restaurants").hasRole("owner")
                         .requestMatchers(HttpMethod.POST, "/restaurants").hasAuthority("owner")
@@ -40,9 +41,7 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST, "/api/orders/**").permitAll()
                         .requestMatchers(HttpMethod.GET,  "/api/orders/**").permitAll()
                         .requestMatchers("/unsecured/**").permitAll()
-                        .requestMatchers(
-                                "/owner/**"
-                        ).authenticated()
+                        .requestMatchers("/owner/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(mgmt -> mgmt.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

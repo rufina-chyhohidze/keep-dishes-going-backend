@@ -1,6 +1,7 @@
 package be.kdg.backend.order.core;
 
 import be.kdg.backend.order.domain.Order;
+import be.kdg.backend.order.domain.PaymentStatus;
 import be.kdg.backend.order.port.out.LoadPendingOrdersPort;
 import be.kdg.backend.order.port.out.SaveOrderPort;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,10 +29,13 @@ public class OrderAutoRejectScheduler {
     @Scheduled(fixedDelay = 60_000)
     public void autoReject() {
         List<Order> pending = loadPendingOrdersPort.findPendingOlderThan(Duration.ofMinutes(5));
+
         for (Order order : pending) {
-            order.reject("No response from restaurant within 5 minutes");
-            saveOrderPort.save(order);
-            order.getDomainEvents().forEach(publisher::publishEvent);
+            if (order.getPaymentInfo().getStatus() == PaymentStatus.PENDING) {
+                order.reject("No response from restaurant within 5 minutes");
+                saveOrderPort.save(order);
+                order.getDomainEvents().forEach(publisher::publishEvent);
+            }
         }
     }
 
