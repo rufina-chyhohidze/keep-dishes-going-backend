@@ -1,5 +1,6 @@
 package be.kdg.backend.order.adapter.out;
 
+import be.kdg.backend.order.domain.OrderStatus;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,8 @@ public interface OrderJpaRepository extends JpaRepository<OrderJpaEntity, UUID> 
     // eagerly fetch orderLines
     @EntityGraph(attributePaths = "orderLines")
     Optional<OrderJpaEntity> findByOrderId(UUID orderId);
+
+    List<OrderJpaEntity> findByRestaurantIdAndStatus(UUID restaurantId, String status);
+
 }
 

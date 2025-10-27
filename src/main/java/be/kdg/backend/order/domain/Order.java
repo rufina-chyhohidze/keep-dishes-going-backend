@@ -60,6 +60,9 @@ public class Order {
     public OrderStatus getStatus() { return status; }
     public List<Object> getDomainEvents() { return domainEvents; }
     public Instant getCreatedAt() { return createdAt; }
+    public double getTotalPrice() {
+        return calculateTotalPrice();
+    }
 
     public double calculateTotalPrice() {
         return orderLines.stream().mapToDouble(OrderLine::totalPrice).sum();
@@ -82,4 +85,5 @@ public class Order {
         this.status = OrderStatus.READY;
         domainEvents.add(new OrderReadyEvent(orderId, restaurantId));
     }
+
 }

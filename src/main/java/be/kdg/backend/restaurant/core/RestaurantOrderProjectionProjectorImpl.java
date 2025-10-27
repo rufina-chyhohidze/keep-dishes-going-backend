@@ -48,8 +48,13 @@ public class RestaurantOrderProjectionProjectorImpl implements RestaurantOrderPr
     @Override
     @Transactional
     public void project(OrderRejectedProjectionCommand command) {
-        var projection = repo.findByRestaurantId(command.restaurantId())
-                .orElseThrow(() -> projectionNotFound(command.restaurantId()));
+        var optionalProjection = repo.findByRestaurantId(command.restaurantId());
+        if (optionalProjection.isEmpty()) {
+            log.warn("Projection not found for restaurant {}", command.restaurantId());
+            return;
+        }
+
+        var projection = optionalProjection.get();
 
         projection.moveAcceptedToRejected();
         repo.save(projection);

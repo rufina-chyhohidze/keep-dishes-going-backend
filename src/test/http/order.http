@@ -52,7 +52,7 @@ client_id=backend-client
     &grant_type=authorization_code
     &scope=openid
     &redirect_uri=http://localhost:3333/callback
-    &code=3e49132e-9ccf-4f62-a76b-e567f1fab4e9.ce23e1fc-9b3e-40c0-952e-358722461973.c3c0fda5-d051-439c-916b-f8ff9c2fb328
+    &code=8f4bdad0-fb10-48ac-a590-9727129a200c.5fafaa7c-ae4f-4fa0-8837-7a7eacba23c4.c3c0fda5-d051-439c-916b-f8ff9c2fb328
 > {%
     client.global.set("access_token", response.body.access_token);
 %}
@@ -75,3 +75,7 @@ POST http://localhost:8080/api/orders/e8f78fc8-5ed3-41f4-9c9a-3600757a8062/ready
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
+### Get pending orders for a restaurant
+GET http://localhost:8080/api/orders/396591b9-4b97-4354-a8b1-0e15372bc09d/pending
+Authorization: Bearer {{access_token}}
+Accept: application/json

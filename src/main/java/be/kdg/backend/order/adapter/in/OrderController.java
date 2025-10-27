@@ -3,10 +3,7 @@ package be.kdg.backend.order.adapter.in;
 import be.kdg.backend.order.adapter.in.dto.PaymentRequest;
 import be.kdg.backend.order.adapter.in.dto.PlaceOrderRequest;
 import be.kdg.backend.order.adapter.in.dto.RejectOrderRequest;
-import be.kdg.backend.order.domain.CustomerInfo;
-import be.kdg.backend.order.domain.OrderLine;
-import be.kdg.backend.order.domain.Payment;
-import be.kdg.backend.order.domain.PaymentStatus;
+import be.kdg.backend.order.domain.*;
 import be.kdg.backend.order.port.in.*;
 import be.kdg.backend.order.port.in.request.AcceptOrderCommand;
 import be.kdg.backend.order.port.in.request.MarkOrderReadyCommand;
@@ -15,6 +12,9 @@ import be.kdg.backend.order.port.in.request.RejectOrderCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +30,15 @@ public class OrderController {
     private final RejectOrderUseCase rejectOrderUseCase;
     private final MarkOrderReadyUseCase markOrderReadyUseCase;
     private final CreatePaymentLinkUseCase createPaymentLinkUseCase;
+    private final LoadOrdersForRestaurantUseCase loadOrdersForRestaurantUseCase;
 
-    public OrderController(PlaceOrderUseCase placeOrderUseCase,AcceptOrderUseCase acceptOrderUseCase,RejectOrderUseCase rejectOrderUseCase,MarkOrderReadyUseCase markOrderReadyUseCase,CreatePaymentLinkUseCase createPaymentLinkUseCase) {
+    public OrderController(PlaceOrderUseCase placeOrderUseCase,AcceptOrderUseCase acceptOrderUseCase,RejectOrderUseCase rejectOrderUseCase,MarkOrderReadyUseCase markOrderReadyUseCase,CreatePaymentLinkUseCase createPaymentLinkUseCase,LoadOrdersForRestaurantUseCase loadOrdersForRestaurantUseCase) {
         this.placeOrderUseCase = placeOrderUseCase;
         this.acceptOrderUseCase = acceptOrderUseCase;
         this.rejectOrderUseCase = rejectOrderUseCase;
         this.markOrderReadyUseCase = markOrderReadyUseCase;
         this.createPaymentLinkUseCase = createPaymentLinkUseCase;
+        this.loadOrdersForRestaurantUseCase = loadOrdersForRestaurantUseCase;
     }
 
     @PostMapping
@@ -104,5 +106,23 @@ public class OrderController {
     public ResponseEntity<String> createPaymentLink(@PathVariable UUID orderId) {
         String url = createPaymentLinkUseCase.createPaymentLink(orderId);
         return ResponseEntity.ok(url);
+    }
+
+    /**
+     * Returns pending orders for the owner’s restaurant.
+     * The owner is authenticated and their restaurantId is retrieved from the request.
+     */
+    @GetMapping("/{restaurantId}/pending")
+    @PreAuthorize("hasAuthority('owner')")
+    public ResponseEntity<List<Order>> getPendingOrdersForRestaurant(
+            @PathVariable UUID restaurantId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        // also validate that this restaurantId belongs to the owner (optional security check)
+        List<Order> orders = loadOrdersForRestaurantUseCase.findOrdersByRestaurantAndStatus(
+                restaurantId,
+                OrderStatus.PLACED
+        );
+        return ResponseEntity.ok(orders);
     }
 }

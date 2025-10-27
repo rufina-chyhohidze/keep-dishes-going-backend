@@ -1,5 +1,6 @@
 package be.kdg.backend.order.adapter.out;
 
+import be.kdg.backend.order.adapter.out.mapper.OrderMapper;
 import be.kdg.backend.order.domain.*;
 import be.kdg.backend.order.port.out.LoadOrderPort;
 import be.kdg.backend.order.port.out.LoadPendingOrdersPort;
@@ -21,14 +22,13 @@ public class OrderJpaAdapter implements SaveOrderPort, LoadOrderPort, LoadPendin
 
     @Override
     public void save(Order order) {
-        repo.save(new OrderJpaEntity(order));
+        repo.save(OrderMapper.toJpaEntity(order));
     }
-
 
     @Override
     public Order load(UUID orderId) {
         return repo.findByOrderId(orderId)
-                .map(this::toDomain)
+                .map(OrderMapper::toDomain)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
     }
 
@@ -37,39 +37,7 @@ public class OrderJpaAdapter implements SaveOrderPort, LoadOrderPort, LoadPendin
         Instant threshold = Instant.now().minus(maxAge);
         return repo.findPendingOlderThan(threshold)
                 .stream()
-                .map(this::toDomain)
+                .map(OrderMapper::toDomain)
                 .toList();
     }
-
-    private Order toDomain(OrderJpaEntity entity) {
-        CustomerInfo customerInfo = new CustomerInfo(
-                entity.getName(),
-                entity.getEmail(),
-                entity.getStreet(),
-                entity.getNumber(),
-                entity.getPostalCode(),
-                entity.getCity(),
-                entity.getCountry()
-        );
-
-        Payment payment = new Payment(
-                entity.getPaymentId(),
-                entity.getProvider(),
-                PaymentStatus.valueOf(entity.getPaymentStatus())
-        );
-
-        List<OrderLine> lines = entity.getOrderLines().stream()
-                .map(e -> new OrderLine(e.getDishId(), e.getQuantity(), e.getPriceAtCheckout()))
-                .toList();
-
-        return new Order(
-                entity.getOrderId(),
-                entity.getRestaurantId(),
-                customerInfo,
-                lines,
-                payment,
-                OrderStatus.valueOf(entity.getStatus()),
-                entity.getCreatedAt()
-        );
-    }
-    }
+}

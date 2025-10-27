@@ -86,22 +86,3 @@ public class OrderJpaEntity {
 }
 
 
-@Embeddable
-class OrderLineEmbeddable {
-    private UUID dishId;
-    private int quantity;
-    private BigDecimal priceAtCheckout;
-
-    protected OrderLineEmbeddable() {}
-
-    public OrderLineEmbeddable(OrderLine line) {
-        this.dishId = line.dishId();
-        this.quantity = line.quantity();
-        this.priceAtCheckout = line.priceAtCheckout();
-    }
-
-    public UUID getDishId() { return dishId; }
-    public int getQuantity() { return quantity; }
-    public BigDecimal getPriceAtCheckout() { return priceAtCheckout; }
-}
-
