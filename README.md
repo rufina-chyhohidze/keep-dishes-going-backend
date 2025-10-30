@@ -5,6 +5,23 @@ This is the **Spring Boot backend** built with a **Hexagonal Architecture**, int
 
 ---
 
+##  How to Run Locally
+
+-- docker compose up
+
+## To visit RabbitMQ and check messaging:
+Go to http://localhost:15672
+Login with your RabbitMQ credentials (default: user/password that were set in docker-compose).
+
+## For interaction with Stripe payment system run this in terminal:
+- stripe listen --forward-to localhost:8080/webhooks/stripe
+
+1. Clone the repository
+   ```bash
+   git clone https://gitlab.com/kdg-ti/programming6/students/25-26/chyhohidze-rufina/backend.git
+   cd backend
+
+
 ##  Project Overview
 
 The backend handles business logic, authentication, and communication with external systems such as:
@@ -149,10 +166,3 @@ Features that are planned or partially implemented.
 - **Docker (optional for local testing)**
 
 ---
-
-##  How to Run Locally
-
-1. Clone the repository
-   ```bash
-   git clone https://gitlab.com/kdg-ti/programming6/students/25-26/chyhohidze-rufina/backend.git
-   cd backend
