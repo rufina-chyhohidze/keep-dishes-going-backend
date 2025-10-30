@@ -1,6 +1,6 @@
 package be.kdg.backend.restaurant.domain;
 
-import be.kdg.backend.common.events.restaurant.DishEditedAsDraftEvent;
+import be.kdg.backend.common.events.DishEditedAsDraftEvent;
 
 import java.math.BigDecimal;
 import java.util.*;

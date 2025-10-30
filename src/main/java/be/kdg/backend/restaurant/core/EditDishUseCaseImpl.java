@@ -5,6 +5,7 @@ import be.kdg.backend.restaurant.port.in.EditDishUseCase;
 import be.kdg.backend.restaurant.port.in.request.EditDishCommand;
 import be.kdg.backend.restaurant.port.out.LoadDishPort;
 import be.kdg.backend.restaurant.port.out.SaveDishPort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class EditDishUseCaseImpl implements EditDishUseCase{
     private static final Logger log = LoggerFactory.getLogger(EditDishUseCaseImpl.class);
 

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class RestaurantSalesSnapshotProjectorImpl implements RestaurantSalesSnapshotProjector {
 
     private static final Logger log = LoggerFactory.getLogger(RestaurantSalesSnapshotProjectorImpl.class);

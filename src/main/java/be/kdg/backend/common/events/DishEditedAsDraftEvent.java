@@ -1,4 +1,4 @@
-package be.kdg.backend.common.events.restaurant;
+package be.kdg.backend.common.events;
 
 
 import java.util.UUID;

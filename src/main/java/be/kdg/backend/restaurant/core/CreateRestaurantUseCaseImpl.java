@@ -8,6 +8,7 @@ import be.kdg.backend.restaurant.port.out.LoadRestaurantByOwnerId;
 import be.kdg.backend.restaurant.port.out.LoadRestaurantPort;
 import be.kdg.backend.restaurant.port.out.SaveMenuPort;
 import be.kdg.backend.restaurant.port.out.SaveRestaurantPort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class CreateRestaurantUseCaseImpl implements CreateRestaurantUseCase {
 
     private Logger logger = LoggerFactory.getLogger(CreateRestaurantUseCaseImpl.class);

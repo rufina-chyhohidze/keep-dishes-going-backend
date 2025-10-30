@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class RestaurantWorkloadProjectorImpl implements RestaurantWorkloadProjector {
     private static final Logger log = LoggerFactory.getLogger(RestaurantWorkloadProjectorImpl.class);
 

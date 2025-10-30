@@ -4,12 +4,14 @@ import be.kdg.backend.restaurant.domain.Dish;
 import be.kdg.backend.restaurant.domain.DishAvailability;
 import be.kdg.backend.restaurant.port.in.LoadDishesByRestaurantUseCase;
 import be.kdg.backend.restaurant.port.out.LoadDishPort;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class LoadDishesByRestaurantUseCaseImpl implements LoadDishesByRestaurantUseCase {
     private final LoadDishPort loadDishPort;
 
